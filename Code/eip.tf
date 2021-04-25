@@ -2,6 +2,6 @@
   id = "eipalloc-0655f1ffa6c031052"
 }*/
 resource "aws_eip" "eip" {
-  instance = aws_instance.VM1.id
-  vpc      = true
+ # instance = aws_instance.VM1.id
+  
 }

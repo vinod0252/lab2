@@ -1,6 +1,8 @@
-resource "aws_elb" "lb1" {
-  name               = "terraform-lb1"
-  availability_zones = ["us-east-2a"]
+resource "aws_elb" "lb2" {
+  name               = "lb2"
+ # availability_zones =  ["us-east-2a", "us-east-2b", "us-east-2c"]
+  subnets = [aws_subnet.private_subnet1.id]
+  internal = "true"
 
   
 
