@@ -18,15 +18,11 @@ resource "aws_route_table" "rt-private" {
 
   
  route {
-    cidr_block = "10.0.3.0/24"
+    cidr_block = "0.0.0.0/0"
     gateway_id = aws_nat_gateway.NGW4.id
   }
   
-route {
-    cidr_block = "10.0.4.0/24"
-    gateway_id = aws_nat_gateway.NGW4.id
-  }
-  
+
   tags = {
     Name = "rt2"
   }
