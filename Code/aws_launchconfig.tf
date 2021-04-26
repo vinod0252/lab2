@@ -4,12 +4,13 @@ resource "aws_launch_configuration" "alcf" {
   instance_type = "t2.micro"
   security_groups = [ aws_security_group.SG1.id ]
   user_data = data.template_file.user_data.rendered
+  key_name = "ec2_key"
 lifecycle {
   create_before_destroy= true
 }
 
 }
-
+/*
 resource "aws_launch_configuration" "alcf2" {
   name          = "alcf2"
   image_id      = "ami-01e7ca2ef94a0ae86"
@@ -21,23 +22,30 @@ lifecycle {
 }
 
 }
+*/
 data "template_file" "user_data"{
     template=file("user_data.sh")
 }
 
+
 resource "aws_autoscaling_group" "asg1" {
   name                      = "asg1"
-  max_size                  = 1
-  min_size                  = 1
-  health_check_grace_period = 300
-  health_check_type         = "ELB"
-  desired_capacity          = 1
-  force_delete              = true
+  max_size                  = 2
+  min_size                  = 2
+  #health_check_grace_period = 300
+  #health_check_type         = "ELB"
+  #desired_capacity          = 1
+  #force_delete              = true
   launch_configuration      = aws_launch_configuration.alcf.name
-  vpc_zone_identifier       = [aws_subnet.private_subnet1.id]
+  vpc_zone_identifier       = [aws_subnet.private_subnet1.id, aws_subnet.private_subnet2.id]
 
 }
 
+resource "aws_autoscaling_attachment" "asg_attachment" {
+  autoscaling_group_name = aws_autoscaling_group.asg1.id
+  elb                    = aws_elb.lb2.id
+}
+/*
 resource "aws_autoscaling_group" "asg2" {
   name                      = "asg2"
   max_size                  = 1
@@ -51,3 +59,4 @@ resource "aws_autoscaling_group" "asg2" {
 
 
 }
+*/
